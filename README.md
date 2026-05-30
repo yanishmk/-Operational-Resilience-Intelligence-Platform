@@ -1,114 +1,231 @@
 # Operational Resilience Intelligence Platform
 
-Python and Supabase project that simulates a banking infrastructure, detects operational anomalies, manages incident lifecycle, estimates business impact, analyzes propagation, identifies root causes, ranks critical services, runs scenario simulations, and computes resilience KPIs.
+An end-to-end Python and Supabase platform that simulates the operational resilience workflow of a financial institution: infrastructure monitoring, anomaly detection, incident lifecycle management, business impact analysis, dependency propagation, root cause analysis, risk scoring, recommendations, scenario simulation, and executive reporting.
 
-## Features
+This project was built as a portfolio-grade data engineering and analytics application for banking operational resilience, inspired by concepts such as incident management, SLA/RTO/RPO monitoring, critical service mapping, third-party risk, and executive resilience dashboards.
 
-- Synthetic banking service metrics generation
-- Supabase upload pipeline
-- Anomaly detection and incident creation
-- Incident resolution lifecycle with duration tracking
-- SLA, RTO, RPO target management
-- Tolerance breach detection
-- Business impact estimation
-- Incident propagation analysis
+## What The Project Does
+
+The platform models a banking technology environment with services such as Payment API, Core Banking System, Login Service, Customer Database, Transaction Database, Cloud Provider, ATM Network, and Monitoring System.
+
+It generates operational metrics, uploads them to Supabase PostgreSQL, detects abnormal service behavior, creates incidents, resolves incidents when metrics recover, calculates business impact, analyzes downstream propagation, ranks critical services, identifies suspected root causes, generates recommendations, simulates crisis scenarios, evaluates vendor/cloud concentration risk, and displays the results in a Streamlit dashboard.
+
+## Key Capabilities
+
+- Synthetic banking infrastructure metrics generation
+- Supabase PostgreSQL ingestion pipeline
+- Anomaly detection based on latency, error rate, uptime, CPU, and memory
+- Incident creation with duplicate prevention
+- Incident resolution lifecycle with `resolved_at` and `duration_minutes`
+- SLA, RTO, and RPO target management
+- RTO tolerance breach detection
+- Business impact estimation using incident severity, duration, failed transactions, transaction volume, and service criticality
+- Dependency propagation analysis across banking services
 - Critical service ranking
 - Root cause analysis
-- Resilience score calculation
-- Recommendation generation
-- Crisis scenario simulation
-- Vendor and cloud concentration risk analysis
-- Advanced resilience KPIs
-- Streamlit dashboard
+- Global bank resilience score
+- Operational recommendations by incident type, service, severity, impact, and propagation
+- Crisis scenario simulation for major service failures
+- Vendor risk scoring
+- Cloud concentration risk analysis
+- Advanced KPIs: MTTR, MTTD, MTBF, SLA compliance, open incident rate, critical incident rate
+- Streamlit executive dashboard
 
-## Project Structure
+## Architecture
 
 ```text
-.
-├── app.py
-├── generate_metrics.py
-├── upload_metrics.py
-├── detect_anomalies.py
-├── incident_resolution_engine.py
-├── sla_rto_rpo_engine.py
-├── tolerance_breach_engine.py
-├── business_impact_engine.py
-├── propagation_engine.py
-├── critical_service_ranking.py
-├── root_cause_engine.py
-├── resilience_score_engine.py
-├── recommendations_engine.py
-├── scenario_simulation_engine.py
-├── vendor_risk_engine.py
-├── cloud_concentration_risk_engine.py
-├── advanced_resilience_kpis.py
-├── run_pipeline.py
-├── operational_resilience_schema_updates.sql
-├── requirements.txt
-└── .env.example
+Synthetic Metrics
+      |
+      v
+service_metrics table
+      |
+      v
+Anomaly Detection Engine
+      |
+      v
+incidents + alerts
+      |
+      +--> Incident Resolution Engine
+      +--> Business Impact Engine
+      +--> Propagation Engine
+      +--> Root Cause Engine
+      +--> Critical Service Ranking
+      +--> Resilience Score Engine
+      +--> Recommendations Engine
+      +--> Scenario Simulation Engine
+      +--> Vendor / Cloud Risk Engines
+      +--> Advanced KPI Engine
+      |
+      v
+Streamlit Dashboard
+```
+
+## Tech Stack
+
+- Python
+- Supabase PostgreSQL
+- Supabase Python client
+- Streamlit
+- Pandas
+- Plotly
+- python-dotenv
+
+## Database Tables
+
+Core operational tables:
+
+- `services`
+- `dependencies`
+- `service_metrics`
+- `incidents`
+- `alerts`
+
+Analysis and intelligence tables:
+
+- `business_impact`
+- `incident_propagation`
+- `service_criticality_ranking`
+- `root_cause_analysis`
+- `resilience_score`
+- `service_resilience_targets`
+- `tolerance_breaches`
+- `resilience_recommendations`
+- `scenario_simulations`
+- `vendors`
+- `vendor_dependencies`
+- `advanced_resilience_kpis`
+
+## Processing Engines
+
+| Script | Purpose |
+| --- | --- |
+| `generate_metrics.py` | Generates synthetic service metrics for the banking infrastructure |
+| `upload_metrics.py` | Uploads generated metrics to Supabase |
+| `sla_rto_rpo_engine.py` | Seeds SLA, RTO, and RPO targets for critical services |
+| `detect_anomalies.py` | Detects anomalies and creates incidents and alerts |
+| `incident_resolution_engine.py` | Resolves incidents when service metrics return to normal |
+| `tolerance_breach_engine.py` | Detects RTO breaches |
+| `business_impact_engine.py` | Calculates business impact for incidents |
+| `propagation_engine.py` | Analyzes downstream service propagation |
+| `critical_service_ranking.py` | Ranks services by operational criticality |
+| `root_cause_engine.py` | Identifies suspected root causes |
+| `resilience_score_engine.py` | Calculates the global resilience score |
+| `recommendations_engine.py` | Generates resilience recommendations |
+| `scenario_simulation_engine.py` | Simulates major crisis scenarios |
+| `vendor_risk_engine.py` | Scores vendor and third-party risk |
+| `cloud_concentration_risk_engine.py` | Measures cloud provider concentration risk |
+| `advanced_resilience_kpis.py` | Calculates MTTR, MTTD, MTBF, SLA compliance, and incident rates |
+| `run_pipeline.py` | Runs the full pipeline in order |
+
+## Streamlit Dashboard
+
+The dashboard includes:
+
+- Executive Overview
+- Incident Center
+- Business Impact
+- Propagation Analysis
+- Critical Services
+- Recommendations
+- Scenario Simulations
+- What-if Simulation
+- Vendor and Cloud Risk
+- Advanced KPIs
+
+Run locally:
+
+```bash
+streamlit run app.py
 ```
 
 ## Setup
 
-1. Create a Supabase project.
-2. Run the SQL in `operational_resilience_schema_updates.sql` inside the Supabase SQL Editor.
-3. Create a local `.env` file from `.env.example`:
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yanishmk/-Operational-Resilience-Intelligence-Platform.git
+cd -Operational-Resilience-Intelligence-Platform
+```
+
+2. Install dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+3. Create a `.env` file:
 
 ```env
 SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_KEY=your-supabase-anon-key
 ```
 
-4. Install dependencies:
+4. Create the database schema:
 
-```bash
-python -m pip install -r requirements.txt
+Open Supabase SQL Editor and run:
+
+```text
+operational_resilience_schema_updates.sql
 ```
 
-## Run The Pipeline
-
-Run all processing engines in order:
+5. Run the full pipeline:
 
 ```bash
 python run_pipeline.py
 ```
 
-Or run each stage manually:
-
-```bash
-python generate_metrics.py
-python upload_metrics.py
-python sla_rto_rpo_engine.py
-python detect_anomalies.py
-python incident_resolution_engine.py
-python tolerance_breach_engine.py
-python business_impact_engine.py
-python propagation_engine.py
-python critical_service_ranking.py
-python root_cause_engine.py
-python resilience_score_engine.py
-python recommendations_engine.py
-python scenario_simulation_engine.py
-python vendor_risk_engine.py
-python cloud_concentration_risk_engine.py
-python advanced_resilience_kpis.py
-```
-
-## Run Dashboard
+6. Launch the dashboard:
 
 ```bash
 streamlit run app.py
 ```
 
-For Streamlit Community Cloud, add these values in **App settings > Secrets**:
+## Streamlit Cloud Deployment
+
+In Streamlit Community Cloud:
+
+1. Select `app.py` as the main file.
+2. Use Python 3.11 or Python 3.12 in Advanced settings.
+3. Add the following secrets:
 
 ```toml
 SUPABASE_URL = "https://your-project-ref.supabase.co"
 SUPABASE_KEY = "your-supabase-anon-key"
 ```
 
-In **Advanced settings**, select a stable Python version such as Python 3.11 or 3.12. If the app was already created with another Python version, delete the Streamlit app and redeploy it with the correct version selected.
+Important: `SUPABASE_URL` should be the project URL only. Do not include `/rest/v1`.
 
-## GitHub Notes
+## Example Recommendation Rules
 
-The `.env` file and generated CSV data are intentionally ignored by Git. Use `.env.example` to document required environment variables without exposing secrets.
+- Payment API + latency spike + critical severity:
+  `Scale payment processing workers and activate fallback payment route.`
+
+- Cloud Provider + critical severity:
+  `Trigger multi-region failover and validate critical service redundancy.`
+
+- Customer Database + high error rate:
+  `Check database connection pool, query latency and failover replica health.`
+
+## Skills Demonstrated
+
+- Data engineering pipeline design
+- PostgreSQL schema modeling
+- Supabase integration
+- Operational risk analytics
+- Incident lifecycle automation
+- SLA/RTO/RPO monitoring
+- Business impact modeling
+- Dependency graph analysis
+- Dashboard design with Streamlit
+- Modular Python application structure
+- Cloud deployment readiness
+
+## Security Notes
+
+The `.env` file is intentionally ignored by Git. Use `.env.example` to document required variables without exposing credentials.
+
+For production usage, apply stricter Row Level Security policies and avoid using broad demo policies.
+
+## Project Status
+
+This is a portfolio project designed to demonstrate how operational resilience workflows can be modeled with Python, PostgreSQL, and interactive analytics. It is ready for demonstration and can be extended with authentication, scheduled jobs, notification integrations, and more advanced statistical anomaly detection.
