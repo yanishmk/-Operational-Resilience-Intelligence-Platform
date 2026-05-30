@@ -33,7 +33,19 @@ def get_config_value(name):
         return None
 
 
-SUPABASE_URL = get_config_value("SUPABASE_URL")
+def normalize_supabase_url(url):
+    if not url:
+        return None
+
+    url = url.strip().rstrip("/")
+
+    if url.endswith("/rest/v1"):
+        url = url[: -len("/rest/v1")]
+
+    return url
+
+
+SUPABASE_URL = normalize_supabase_url(get_config_value("SUPABASE_URL"))
 SUPABASE_KEY = get_config_value("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
@@ -65,7 +77,8 @@ def load_table(table_name):
 def safe_load(table_name):
     try:
         return load_table(table_name)
-    except Exception:
+    except Exception as error:
+        st.sidebar.warning(f"{table_name}: {error}")
         return pd.DataFrame()
 
 
@@ -144,6 +157,15 @@ page = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 st.sidebar.caption("Financial Operational Resilience Dashboard")
+
+with st.sidebar.expander("Data status"):
+    st.write(f"Supabase URL: `{SUPABASE_URL}`")
+    st.write(f"services: {len(services)}")
+    st.write(f"incidents: {len(incidents)}")
+    st.write(f"business_impact: {len(business_impact)}")
+    st.write(f"incident_propagation: {len(propagation)}")
+    st.write(f"service_criticality_ranking: {len(criticality)}")
+    st.write(f"resilience_score: {len(resilience_score)}")
 
 # =========================
 # EXECUTIVE OVERVIEW
