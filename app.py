@@ -9,21 +9,41 @@ from supabase import create_client
 # CONFIG
 # =========================
 
-load_dotenv(override=True)
-
-for proxy_var in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY"):
-    os.environ.pop(proxy_var, None)
-
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
 st.set_page_config(
     page_title="Operational Resilience Intelligence Platform",
     page_icon="🏦",
     layout="wide"
 )
+
+load_dotenv(override=True)
+
+for proxy_var in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY"):
+    os.environ.pop(proxy_var, None)
+
+
+def get_config_value(name):
+    value = os.getenv(name)
+
+    if value:
+        return value
+
+    try:
+        return st.secrets.get(name)
+    except Exception:
+        return None
+
+
+SUPABASE_URL = get_config_value("SUPABASE_URL")
+SUPABASE_KEY = get_config_value("SUPABASE_KEY")
+
+if not SUPABASE_URL or not SUPABASE_KEY:
+    st.error(
+        "Missing Supabase configuration. Add SUPABASE_URL and SUPABASE_KEY "
+        "to Streamlit secrets or to a local .env file."
+    )
+    st.stop()
+
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 RISK_COLORS = {
     "LOW": "#2ECC71",

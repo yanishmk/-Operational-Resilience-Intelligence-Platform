@@ -100,6 +100,13 @@ python advanced_resilience_kpis.py
 streamlit run app.py
 ```
 
+For Streamlit Community Cloud, add these values in **App settings > Secrets**:
+
+```toml
+SUPABASE_URL = "https://your-project-ref.supabase.co"
+SUPABASE_KEY = "your-supabase-anon-key"
+```
+
 ## GitHub Notes
 
 The `.env` file and generated CSV data are intentionally ignored by Git. Use `.env.example` to document required environment variables without exposing secrets.
