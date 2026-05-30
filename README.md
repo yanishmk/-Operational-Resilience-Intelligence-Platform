@@ -107,6 +107,8 @@ SUPABASE_URL = "https://your-project-ref.supabase.co"
 SUPABASE_KEY = "your-supabase-anon-key"
 ```
 
+In **Advanced settings**, select a stable Python version such as Python 3.11 or 3.12. If the app was already created with another Python version, delete the Streamlit app and redeploy it with the correct version selected.
+
 ## GitHub Notes
 
 The `.env` file and generated CSV data are intentionally ignored by Git. Use `.env.example` to document required environment variables without exposing secrets.
