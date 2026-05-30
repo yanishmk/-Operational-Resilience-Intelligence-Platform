@@ -138,63 +138,6 @@ Run locally:
 streamlit run app.py
 ```
 
-## Setup
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yanishmk/-Operational-Resilience-Intelligence-Platform.git
-cd -Operational-Resilience-Intelligence-Platform
-```
-
-2. Install dependencies:
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-3. Create a `.env` file:
-
-```env
-SUPABASE_URL=https://your-project-ref.supabase.co
-SUPABASE_KEY=your-supabase-anon-key
-```
-
-4. Create the database schema:
-
-Open Supabase SQL Editor and run:
-
-```text
-operational_resilience_schema_updates.sql
-```
-
-5. Run the full pipeline:
-
-```bash
-python run_pipeline.py
-```
-
-6. Launch the dashboard:
-
-```bash
-streamlit run app.py
-```
-
-## Streamlit Cloud Deployment
-
-In Streamlit Community Cloud:
-
-1. Select `app.py` as the main file.
-2. Use Python 3.11 or Python 3.12 in Advanced settings.
-3. Add the following secrets:
-
-```toml
-SUPABASE_URL = "https://your-project-ref.supabase.co"
-SUPABASE_KEY = "your-supabase-anon-key"
-```
-
-Important: `SUPABASE_URL` should be the project URL only. Do not include `/rest/v1`.
-
 ## Example Recommendation Rules
 
 - Payment API + latency spike + critical severity:
@@ -220,12 +163,5 @@ Important: `SUPABASE_URL` should be the project URL only. Do not include `/rest/
 - Modular Python application structure
 - Cloud deployment readiness
 
-## Security Notes
 
-The `.env` file is intentionally ignored by Git. Use `.env.example` to document required variables without exposing credentials.
 
-For production usage, apply stricter Row Level Security policies and avoid using broad demo policies.
-
-## Project Status
-
-This is a portfolio project designed to demonstrate how operational resilience workflows can be modeled with Python, PostgreSQL, and interactive analytics. It is ready for demonstration and can be extended with authentication, scheduled jobs, notification integrations, and more advanced statistical anomaly detection.
